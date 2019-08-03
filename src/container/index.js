@@ -1,21 +1,24 @@
 import React, { Fragment, StrictMode } from 'react'
 import { Router } from 'react-router-dom'
 import history from 'Root/history'
+import { connect } from 'react-redux'
+import { ApolloProvider } from 'react-apollo'
 
-import { Provider } from 'react-redux'
 import store from 'Root/store'
 
 import App from 'Root/app'
+import client from './apolloClient'
+import myProfile from '../reducers/myProfile';
 
-const Container = () => {
+const Container = props => {
     return (
-        <Provider store={store}>
+        <ApolloProvider client={client}>
             <Router history={history}>
-                {/* <StrictMode> */}
-                    <App/>
-                {/* </StrictMode> */}
+                <App/>
             </Router>
-        </Provider>
+        </ApolloProvider>
     )
 }
-export default Container
+export default connect(state => ({
+    myProfile: state.myProfile
+}))(Container)

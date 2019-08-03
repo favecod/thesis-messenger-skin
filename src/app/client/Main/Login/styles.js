@@ -3,50 +3,80 @@ import preset from 'jss-preset-default'
 import CONST from 'Root/constants'
 
 jss.setup(preset())
+
 const styles = {
-    container: {
+    login: {
         display: 'flex',
-        width: '100vw',
-        height: '100vh',
-        flexDirection: 'column',
-        alignItems: 'center',
         justifyContent: 'center',
+        alignItems: 'center',
+        color: '#48576a',
+        height: '95vh',
+        background: '#fff',
+    },
+    frame: {
+        boxShadow: CONST.styles.boxShadow,
+        borderRadius: '1rem',
+        background: '#fff',
+    },
+    logo: {
+        fontFamily: 'iransans',
+        fontSize: '4rem',
+        color: CONST.colors.dark,
+        margin: '0'
+    },
+    header: {
+        textAlign: 'center',
+        margin: '0 0 1.5rem',
+        // background: CONST.colors.dark,
+        padding: '2rem 2rem 1rem',
+        borderRadius: '1rem 1rem 0 0'
     },
     form: {
-        border: '2px solid #dfe1e6',
-        padding: '1rem',
-        borderRadius: '4px',
-        color: CONST.colors.dark,
-        width: '30vw'
+        padding: '1rem 2rem 1rem',
     },
-    login: {
+    rememberMe: {
         fontFamily: 'iransans',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        margin: '0 .5rem 0 0'
     },
-    input: {
-        width: '100% !important',
+    flexBetween: {
+        display: 'flex !important',
+        justifyContent: 'space-between !important',
+        alignItems: 'center',
     },
     button: {
         fontFamily: 'iransans',
-        width: '100% !important',
-        display: 'flex',
-        justifyContent: 'center',
-        margin: '1rem 0'
+        borderRadius: '3rem !important',
+        textDecoration: 'none',
+        color: CONST.colors.primary,
     },
-        
-    link: {
-        width: '100%',
-        color: '#0052cc !important',
-        '&:link': {
-            color: '#0052cc !important',
-        }
+    fillButton: {
+        padding: '.5rem 1.5rem !important',
+        fontFamily: 'iransans',
+        borderRadius: '3rem !important',
+        textDecoration: 'none',
+        border: 'none !important'
+    },
+    footer: {
+        display: 'flex !important',
+        justifyContent: 'space-between !important',
+        alignItems: 'center',
+        margin: '1rem 0 0',
     },
     '@media (max-width: 768px)': {
-        form: {
-            width: '95vw',
-        }
+        login: {
+            padding: '0 !important',
+        },
+        frame: {
+            padding: '0 .75rem !important',
+            border: 'none !important',
+            boxShadow: 'none !important',
+        },
+        header: {
+            background: CONST.colors.white,
+        },
+        logo: {
+            color: CONST.colors.dark
+        },
     }
 }
 

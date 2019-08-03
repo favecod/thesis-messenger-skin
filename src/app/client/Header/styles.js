@@ -5,6 +5,7 @@ jss.setup(preset())
 
 const styles = {
     header: {
+        fontFamily: 'iransans',
         position: 'fixed !important',
         width: '100vw',
         top: '0',

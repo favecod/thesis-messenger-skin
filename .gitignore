@@ -1,1 +1,6 @@
-node_modules
+/node_modules
+/dist
+.gitignore
+/src/public
+/src/app/admin
+tasks.txt

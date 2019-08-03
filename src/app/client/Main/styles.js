@@ -5,6 +5,7 @@ jss.setup(preset())
 
 const styles = {
     main: {
+        fontFamily: 'iransans',
         margin: '2.75rem 0 0'
     },
 }

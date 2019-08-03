@@ -1,0 +1,62 @@
+/* Google Sans */
+@font-face {
+    font-family: Google;
+    src: url(fonts/Google/GoogleSans-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: Google;
+    src: url(fonts/Google/GoogleSans-Regular.ttf);
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Google;
+    src: url(fonts/Google/GoogleSans-Medium.ttf);
+    font-weight: 500;
+}
+
+/*  Roboto */
+@font-face {
+    font-family: Roboto;
+    src: url(fonts/Roboto/Roboto-Regular.ttf)
+}
+
+/* Lato */
+@font-face {
+    font-family: Lato;
+    src: url(fonts/Lato/Lato-Regular.ttf)
+}
+
+/* iransans */
+
+@font-face {
+    font-family: iransans;
+    src: url(fonts/IRANSansWeb/ttf/IRANSansWeb_Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: iransans;
+    src: url(fonts/IRANSansWeb/ttf/IRANSansWeb.ttf);
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: iransans;
+    src: url(fonts/IRANSansWeb/ttf/IRANSansWeb_Medium.ttf);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: iransans;
+    src: url(fonts/IRANSansWeb/ttf/IRANSansWeb_Light.ttf);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: iransans;
+    src: url(fonts/IRANSansWeb/ttf/IRANSansWeb_UltraLight.ttf);
+    font-weight: 100;
+}

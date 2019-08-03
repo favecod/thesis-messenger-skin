@@ -1,39 +1,51 @@
 import jss from 'jss'
 import preset from 'jss-preset-default'
-import CONST from 'Root/constants'
 
 jss.setup(preset())
+
 const styles = {
-    container: {
+    home: {
+        fontFamily: 'iransans',
+        height: '95vh',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         justifyContent: 'center',
-        height: '100vh',
-        width: '15vw',
-        margin: '0 auto'
+        alignItems: 'center',
+        background: '#fff',
     },
-    title: {
+    logo: {
+        fontFamily: 'iransans',
+        fontSize: '2rem',
+        fontWeight: '500',
         textAlign: 'center',
+        color: '#2d3436',
+        margin: '0',
+    },
+    content: {
+        display: 'flex',
+        fontFamily: 'iransans',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    description: {
+        fontFamily: 'iransans',
+        fontWeight: '300',
+        padding: '0 .5rem',
+        fontSize: '1.3rem',
     },
     button: {
         fontFamily: 'iransans',
-        width: '100% !important',
-        display: 'flex',
-        justifyContent: 'center',
-        margin: '1rem 0'
-    },
-    link: {
-        width: '100%',
-        color: '#fff !important',
-        textDecoration: 'none',
-        '&:link': {
-            color: '#fff !important',
-        }
+        fontSize: '1.5rem',
+        borderRadius: '3rem !important',
+        padding: '1rem 4rem !important',
     },
     '@media (max-width: 768px)': {
-
+        logo: {
+            fontSize: '5rem',
+        },
     }
+
 }
 
 const {

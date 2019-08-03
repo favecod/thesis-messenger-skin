@@ -1,81 +1,156 @@
-import React, { Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import TextField from '@atlaskit/textfield'
-import Button, { ButtonGroup } from '@atlaskit/button'
-import { Checkbox } from '@atlaskit/checkbox'
-import Form, {
-    CheckboxField,
-    Field,
-    FormFooter,
-    HelperMessage,
-    ErrorMessage,
-    ValidMessage,
-} from '@atlaskit/form'
+import { connect } from 'react-redux'
+import { Layout, Input, Button, Form, Switch } from 'element-react'
+import history from 'Root/history'
+import classnames from 'classnames'
 
+import store from 'Root/store'
+import CONST from 'Root/constants'
+import API from 'Root/api'
 import styles from './styles'
+import helper from 'Root/helper'
 
-export default () => (
-    <div className={styles.container}>
-        <Form
-            onSubmit={data => {
-                console.log('form data', data)
-                return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
-                    data.username === 'error' ? { username: 'IN_USE' } : undefined,
-                )
-            }}
-        >
-            {({ formProps, submitting }) => (
-                <form {...formProps} className={styles.form}>
-                    <h1>ورود به تالار</h1>
-                    <Field name='username' label='نام کاربری' isRequired defaultValue=''>
-                        {({ fieldProps, error }) => (
-                            <Fragment>
-                                <TextField autoComplete='off' {...fieldProps} />
-                                {!error && (
-                                    <HelperMessage>
-                                        شما میتوانید از حروف و اعداد استفاده کنید
-                                    </HelperMessage>
-                                )}
-                            </Fragment>
-                        )}
-                    </Field>
-                    <Field
-                        name='password'
-                        label='رمز عبور'
-                        defaultValue=''
-                        isRequired
-                        validate={value => (value.length < 8 ? 'TOO_SHORT' : undefined)}
-                    >
-                        {({ fieldProps, error, valid }) => (
-                            <Fragment>
-                                <TextField type='password' {...fieldProps} />
-                                {!error && !valid && (
-                                    <HelperMessage>
-                                       بیشتر از هشت کاراکتر باشد و از حرف و عدد و نشانه استفاده کنید
-                                    </HelperMessage>
-                                )}
-                                {error && (
-                                    <ErrorMessage>
-                                        Password needs to be more than 8 characters.
-                                    </ErrorMessage>
-                                )}
-                                {valid && <ValidMessage>Awesome password!</ValidMessage>}
-                            </Fragment>
-                        )}
-                    </Field>
-                    
-                    <FormFooter>
-                        <Button className={styles.button} type='submit' appearance='primary' isLoading={submitting}>
-                            ورود
-                        </Button>
-                        <Link className={styles.link} to='/register'>
-                            <Button className={styles.button} appearance='link' isLoading={submitting}>
-                                ثبت نام
-                            </Button>
-                        </Link>
-                    </FormFooter>
-                </form>
-            )}
-        </Form>
-    </div>
-)
+import { gql } from 'apollo-boost'
+import { graphql } from 'react-apollo'
+
+import loginUser from 'Root/actions/myProfile/login'
+
+const LABELS = CONST.labels.loginPage
+
+
+const login = gql`
+    query login($username: String!,$password: String!){
+        login(username: $username,password: $password) {
+            token
+            user {
+                username
+                fullname
+                id
+            }
+        }
+    }
+`
+
+const Login = props => {
+    helper.setTitle('ورود |‌ تالار')
+    const formDefault =  {
+        username: '',
+        password: '',
+    }
+
+    const [form, setForm] = useState(formDefault)
+    const [isLoad, setIsLoad] = useState(false)
+
+    useEffect(() => {
+        if (props.myProfile.token) {
+            history.push({
+                pathname: `/dashboard`,
+                state: {
+                    username: props.myProfile.username
+                }
+            })
+        }
+    })
+
+    const handelChange = (element, value) => {
+        setForm(prevState => {
+            return {
+                ...prevState,
+                [element]: value
+            }
+        })
+    }   
+
+    const handleSubmit = async () => {
+        if(form.username == '' && form.password == '') {
+            return helper.notification('اخطار', LABELS.notifiUsernameAndPassword, 'warning')
+        } else if (form.username == '') {
+            return helper.notification('اخطار', LABELS.notifiUsername, 'warning')
+        } else if (form.password == '') {
+            return helper.notification('اخطار', LABELS.notifiPassword, 'warning')
+        } else {
+            setIsLoad(true)
+            props.data.fetchMore({
+                variables: { username: form.username, password: form.password},
+                updateQuery: (store, { fetchMoreResult }) => {
+                    setIsLoad(false)
+                    const data = fetchMoreResult.login
+                    let myProfile = {
+                        token: data.token,
+                        username: data.user.username,
+                        image: data.image,
+                        cover: data.cover,
+                        fullname: data.user.fullname,
+                        id: data.user.id
+                    }
+                    loginUser(myProfile)
+                    helper.LOCAL_STORAGE.set('myProfile', JSON.stringify(myProfile))
+                    window.location.reload()
+                    history.push({
+                        pathname: `/dashboard`,
+                        state: {
+                            username: data.username
+                        }
+                    })
+                }
+            }).catch(res => {
+                setIsLoad(false)
+                return helper.notification('Error', res.graphQLErrors[0].message, 'error')
+            })
+        }
+    }
+
+    return(
+        <Layout.Row  className={styles.login}>        
+            <Layout.Col xs={24} md={8} className={styles.frame}>
+                <div className={styles.header}>
+                    <Link className={styles.button} to='/'>
+                        <h2 className={styles.logo}>{LABELS.description}</h2>
+                    </Link>
+                </div>
+                <Form model={form} className={styles.form}>
+                        <Form.Item label={LABELS.usernameLabel} 
+                        prop='username'>
+                            <Input 
+                                size='large'
+                                defaultValue={form.username}
+                                onChange={e => handelChange('username',e)}
+                                className={styles.input}
+                            />
+                        </Form.Item>
+                        <Form.Item label={LABELS.passwordLabel} prop='password'>
+                            <Input 
+                                type='password'
+                                size='large' 
+                                defaultValue={form.password}
+                                onChange={e => handelChange('password',e)}
+                                className={styles.input}
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <div className={styles.footer}>
+                                <Link to='/join'>
+                                    <Button className={styles.button} 
+                                    type='text'>
+                                        {LABELS.joinButton}
+                                    </Button>
+                                </Link>
+                                <Button className={classnames(styles.fillButton)}
+                                    type='primary'
+                                    loading={isLoad}
+                                    onClick={handleSubmit}>
+                                    {LABELS.loginButton}
+                                </Button>
+                            </div>
+                        </Form.Item>
+                    </Form>
+            
+            </Layout.Col>
+        </Layout.Row>
+    )
+}
+
+export default graphql(login)(connect(state => ({
+    myProfile: state.myProfile
+}))(Login))
